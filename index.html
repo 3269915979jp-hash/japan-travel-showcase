@@ -498,8 +498,95 @@
     <section class="cta" id="contact">
         <h2>准备好出发了吗？</h2>
         <p>无论是独行侠的自由行，还是和重要的人一起的深度游。让我们为你定制一段只属于你的日本记忆。</p>
-        <a href="#" class="hero-btn">开始规划</a>
+        <a href="javascript:void(0)" class="hero-btn" onclick="document.getElementById('plan-modal').style.display='flex'">开始规划</a>
     </section>
+
+    <!-- 规划弹窗 -->
+    <div id="plan-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:999; justify-content:center; align-items:center;">
+        <div style="background:var(--cream); border-radius:16px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.4);">
+            
+            <!-- 关闭按钮 -->
+            <div onclick="document.getElementById('plan-modal').style.display='none'" style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:1.5rem; color:#999; z-index:5;">&times;</div>
+            
+            <!-- 头部 -->
+            <div style="background:var(--ink); padding:2.5rem 2rem; border-radius:16px 16px 0 0; text-align:center;">
+                <p style="color:var(--gold); font-size:0.8rem; letter-spacing:4px; text-transform:uppercase;">Start Your Journey</p>
+                <h2 style="color:white; font-size:1.8rem; font-weight:300; margin-top:0.5rem;">定制你的<strong>日本之旅</strong></h2>
+            </div>
+            
+            <!-- 表单 -->
+            <div style="padding:2rem;">
+                <form id="plan-form" onsubmit="event.preventDefault(); document.getElementById('plan-form').style.display='none'; document.getElementById('plan-success').style.display='block';">
+                    
+                    <div style="margin-bottom:1.2rem;">
+                        <label style="font-size:0.85rem; color:#666; letter-spacing:1px;">您的称呼</label>
+                        <input type="text" placeholder="请输入姓名" required style="width:100%; padding:12px 15px; margin-top:6px; border:1px solid #ddd; border-radius:8px; font-size:1rem; font-family:inherit; outline:none; transition:0.3s;" onfocus="this.style.borderColor='#c9a96e'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    
+                    <div style="margin-bottom:1.2rem;">
+                        <label style="font-size:0.85rem; color:#666; letter-spacing:1px;">邮箱地址</label>
+                        <input type="email" placeholder="example@mail.com" required style="width:100%; padding:12px 15px; margin-top:6px; border:1px solid #ddd; border-radius:8px; font-size:1rem; font-family:inherit; outline:none; transition:0.3s;" onfocus="this.style.borderColor='#c9a96e'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    
+                    <div style="margin-bottom:1.2rem;">
+                        <label style="font-size:0.85rem; color:#666; letter-spacing:1px;">手机号码</label>
+                        <input type="tel" placeholder="+86 / +81 ..." style="width:100%; padding:12px 15px; margin-top:6px; border:1px solid #ddd; border-radius:8px; font-size:1rem; font-family:inherit; outline:none; transition:0.3s;" onfocus="this.style.borderColor='#c9a96e'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    
+                    <div style="margin-bottom:1.5rem;">
+                        <label style="font-size:0.85rem; color:#666; letter-spacing:1px;">留言（旅行需求 / 想去的地方）</label>
+                        <textarea placeholder="比如：两个人，想去京都和东京，5天左右..." rows="3" style="width:100%; padding:12px 15px; margin-top:6px; border:1px solid #ddd; border-radius:8px; font-size:1rem; font-family:inherit; outline:none; resize:vertical; transition:0.3s;" onfocus="this.style.borderColor='#c9a96e'" onblur="this.style.borderColor='#ddd'"></textarea>
+                    </div>
+                    
+                    <button type="submit" style="width:100%; padding:14px; background:var(--ink); color:white; border:none; border-radius:8px; font-size:1rem; font-family:inherit; cursor:pointer; letter-spacing:2px; transition:0.3s;" onmouseover="this.style.background='#c9a96e'; this.style.color='#1a1a2e'" onmouseout="this.style.background='#1a1a2e'; this.style.color='white'">提交规划需求</button>
+                </form>
+                
+                <!-- 提交成功后显示联系方式 -->
+                <div id="plan-success" style="display:none; text-align:center; padding:1rem 0;">
+                    <div style="font-size:3rem; margin-bottom:1rem;">✅</div>
+                    <h3 style="color:var(--ink); font-size:1.3rem;">感谢您的信任！</h3>
+                    <p style="color:#666; margin-top:0.5rem; font-size:0.95rem;">我们会尽快与您联系。<br>您也可以通过以下方式直接找到我们：</p>
+                    
+                    <div style="margin-top:2rem; background:white; border-radius:12px; padding:1.5rem; border:1px solid #eee;">
+                        <p style="font-size:0.8rem; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-bottom:1rem;">Contact Us</p>
+                        
+                        <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f0f0f0;">
+                            <span style="font-size:1.3rem;">📧</span>
+                            <div style="text-align:left;">
+                                <div style="font-size:0.75rem; color:#999;">邮箱</div>
+                                <div style="font-size:0.95rem; color:var(--ink);">wakyo.travel@gmail.com</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f0f0f0;">
+                            <span style="font-size:1.3rem;">📱</span>
+                            <div style="text-align:left;">
+                                <div style="font-size:0.75rem; color:#999;">电话 / LINE</div>
+                                <div style="font-size:0.95rem; color:var(--ink);">+81 080-XXXX-XXXX</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex; align-items:center; gap:12px; padding:10px 0;">
+                            <span style="font-size:1.3rem;">💬</span>
+                            <div style="text-align:left;">
+                                <div style="font-size:0.75rem; color:#999;">Telegram</div>
+                                <div style="font-size:0.95rem; color:var(--ink);">@fghe567</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 微信二维码区域 -->
+                    <div style="margin-top:1.5rem; background:white; border-radius:12px; padding:1.5rem; border:1px solid #eee;">
+                        <p style="font-size:0.85rem; color:var(--ink); font-weight:700;">💬 微信扫码添加</p>
+                        <div id="qr-placeholder" style="width:180px; height:180px; margin:1rem auto; background:#f5f5f5; border:2px dashed #ccc; border-radius:12px; display:flex; justify-content:center; align-items:center; color:#999; font-size:0.85rem;">
+                            请替换为你的<br>微信二维码图片
+                        </div>
+                        <p style="font-size:0.8rem; color:#999;">微信号: 请填入你的微信号</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
