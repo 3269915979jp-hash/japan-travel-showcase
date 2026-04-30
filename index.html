@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>和境 WAKYO | 发现日本之美</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;500;700&display=swap');
+
+        :root {
+            --ink: #1a1a2e;
+            --gold: #c9a96e;
+            --cream: #f5f0e8;
+            --white: #ffffff;
+            --grey: #888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            color: var(--ink);
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+
+        /* ===== Custom Scrollbar ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* ===== Navigation ===== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.4s;
+        }
+
+        nav.scrolled {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 4px;
+        }
+
+        .logo span { color: var(--gold); font-weight: 300; }
+
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        nav a:hover { color: var(--gold); }
+        a { text-decoration: none; color: inherit; }
+
+        /* ===== Hero ===== */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero-tag {
+            font-size: 0.9rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.3s forwards;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.8);
+            max-width: 500px;
+            opacity: 0;
+            animation: fadeUp 1s 0.9s forwards;
+        }
+
+        .hero-btn {
+            margin-top: 3rem;
+            padding: 1rem 3rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: 0.4s;
+            opacity: 0;
+            animation: fadeUp 1s 1.2s forwards;
+        }
+
+        .hero-btn:hover {
+            background: var(--gold);
+            color: var(--ink);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Scroll Indicator ===== */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px; height: 40px;
+            background: var(--gold);
+            margin-top: 10px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ===== Section Common ===== */
+        section { padding: 8rem 5%; }
+        .section-tag {
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+        .section-title strong { font-weight: 700; }
+
+        /* ===== Destinations ===== */
+        .destinations { background: var(--white); }
+
+        .dest-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .dest-card {
+            position: relative;
+            height: 450px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .dest-card img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+        .dest-card:hover img { transform: scale(1.1); }
+
+        .dest-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: var(--white);
+        }
+
+        .dest-overlay h3 { font-size: 1.5rem; font-weight: 500; }
+        .dest-overlay p { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.3rem; }
+
+        /* ===== Seasons (横向滚动展示) ===== */
+        .seasons { background: var(--ink); color: var(--white); }
+        .seasons .section-title { color: var(--white); }
+
+        .season-strip {
+            display: flex;
+            gap: 2rem;
+            margin-top: 4rem;
+            overflow-x: auto;
+            padding-bottom: 2rem;
+            scroll-snap-type: x mandatory;
+        }
+
+        .season-strip::-webkit-scrollbar { height: 4px; }
+        .season-strip::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+        .season-card {
+            flex: 0 0 320px;
+            scroll-snap-align: start;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .season-card img {
+            width: 320px; height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .season-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: white;
+        }
+
+        .season-label h3 { font-size: 1.3rem; }
+        .season-label p { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 5px; }
+
+        /* ===== Culture ===== */
+        .culture { background: var(--cream); }
+
+        .culture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+            align-items: center;
+        }
+
+        .culture-img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .culture-text p {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #555;
+        }
+
+        .culture-text blockquote {
+            margin-top: 2rem;
+            padding-left: 2rem;
+            border-left: 3px solid var(--gold);
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        /* ===== Stats ===== */
+        .stats {
+            background: var(--ink);
+            color: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 5rem 5%;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 3.5rem; font-weight: 700; color: var(--gold); }
+        .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 0.5rem; letter-spacing: 2px; }
+
+        /* ===== CTA ===== */
+        .cta {
+            height: 70vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+                        url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 300;
+        }
+
+        .cta p {
+            margin-top: 1rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+        }
+
+        .cta .hero-btn { margin-top: 2rem; }
+
+        /* ===== Footer ===== */
+        footer {
+            background: #0d0d1a;
+            color: rgba(255,255,255,0.5);
+            padding: 3rem 5%;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        footer .logo { margin-bottom: 1rem; display: inline-block; }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.8rem; }
+            .dest-grid { grid-template-columns: 1fr 1fr; }
+            .culture-grid { grid-template-columns: 1fr; }
+            nav ul { display: none; }
+            .stats { flex-wrap: wrap; gap: 2rem; }
+        }
+
+        @media (max-width: 600px) {
+            .dest-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">和境 <span>WAKYO</span></div>
+        <ul>
+            <li><a href="#destinations">目的地</a></li>
+            <li><a href="#seasons">四季</a></li>
+            <li><a href="#culture">文化</a></li>
+            <li><a href="#contact">联系</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <p class="hero-tag">Discover Japan</p>
+        <h1>一期一会，<br>遇见<em>最美日本</em></h1>
+        <p class="hero-sub">从古都京都的千年禅意，到东京霓虹的未来脉搏。<br>每一步，都是一场与美的邂逅。</p>
+        <a href="#destinations" class="hero-btn">探索旅程</a>
+        <div class="scroll-indicator">SCROLL</div>
+    </section>
+
+    <!-- Destinations -->
+    <section class="destinations" id="destinations">
+        <p class="section-tag">Destinations</p>
+        <div class="section-title">穿越<strong>千年与未来</strong>的旅途</div>
+        <div class="dest-grid">
+            <div class="dest-card">
+                <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&q=80" alt="京都">
+                <div class="dest-overlay">
+                    <h3>京都 Kyoto</h3>
+                    <p>千本鸟居 · 金阁寺 · 岚山竹林</p>
+                </div>
+            </div>
+            <div class="dest-card">
+                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80" alt="东京">
+                <div class="dest-overlay">
+                    <h3>东京 Tokyo</h3>
+                    <p>涩谷十字 · 秋叶原 · 新宿歌舞伎町</p>
+                </div>
+            </div>
+            <div class="dest-card">
+                <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800&q=80" alt="大阪">
+                <div class="dest-overlay">
+                    <h3>大阪 Osaka</h3>
+                    <p>道顿堀 · 大阪城 · 通天阁</p>
+                </div>
+            </div>
+            <div class="dest-card">
+                <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800&q=80" alt="富士山">
+                <div class="dest-overlay">
+                    <h3>富士山 Mt.Fuji</h3>
+                    <p>河口湖 · 箱根温泉 · 五合目</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seasons -->
+    <section class="seasons" id="seasons">
+        <p class="section-tag">Four Seasons</p>
+        <div class="section-title">四季流转，<strong>皆是风景</strong></div>
+        <div class="season-strip">
+            <div class="season-card">
+                <img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?w=600&q=80" alt="春">
+                <div class="season-label">
+                    <h3>🌸 春 · 桜</h3>
+                    <p>三月末至四月中旬，粉色樱花铺满街道与河岸。目黑川、哲学之道、吉野山，花见の季节。</p>
+                </div>
+            </div>
+            <div class="season-card">
+                <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=600&q=80" alt="夏">
+                <div class="season-label">
+                    <h3>🎆 夏 · 祭</h3>
+                    <p>花火大会、盂兰盆舞、浴衣与风铃。夏日的日本，是热烈与浪漫的交织。</p>
+                </div>
+            </div>
+            <div class="season-card">
+                <img src="https://images.unsplash.com/photo-1576607934498-b45e4be2f0f5?w=600&q=80" alt="秋">
+                <div class="season-label">
+                    <h3>🍁 秋 · 紅葉</h3>
+                    <p>十一月的京都，红叶如火。清水寺、嵯峨野、高台寺的夜间特别拝観，美到窒息。</p>
+                </div>
+            </div>
+            <div class="season-card">
+                <img src="https://images.unsplash.com/photo-1517299321609-52687d1bc55a?w=600&q=80" alt="冬">
+                <div class="season-label">
+                    <h3>❄️ 冬 · 雪</h3>
+                    <p>北海道粉雪、白川乡合掌村点灯、温泉与蟹。在纯白世界里，感受极致的静谧。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Culture -->
+    <section class="culture" id="culture">
+        <p class="section-tag">Culture & Spirit</p>
+        <div class="section-title">不只是旅行，<br>更是一场<strong>文化沉浸</strong></div>
+        <div class="culture-grid">
+            <img class="culture-img" src="https://images.unsplash.com/photo-1528164344705-47542687000d?w=800&q=80" alt="日本文化">
+            <div class="culture-text">
+                <p>
+                    日本是一个将「细节」做到极致的国度。从一碗拉面的汤底，到寺庙庭园里一块石头的摆放角度，处处渗透着匠人精神与美学哲学。
+                </p>
+                <p style="margin-top:1rem;">
+                    茶道的「一期一会」告诉你：此刻的相遇，一生仅此一次。怀石料理的「旬」教会你：尊重食材最好的时节。神社的参道让你慢下脚步：在碎石与�的鸟居之间，找到内心的平静。
+                </p>
+                <blockquote>
+                    「花は桜木、人は武士」<br>
+                    <small style="color:#999;">— 花中樱花，人中武士。追求极致，然后坦然凋落。</small>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-num">47</div>
+            <div class="stat-label">都道府县</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">25</div>
+            <div class="stat-label">世界遗产</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">3000+</div>
+            <div class="stat-label">温泉旅馆</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">美食与感动</div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+        <h2>准备好出发了吗？</h2>
+        <p>无论是独行侠的自由行，还是和重要的人一起的深度游。让我们为你定制一段只属于你的日本记忆。</p>
+        <a href="#" class="hero-btn">开始规划</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">和境 <span>WAKYO</span></div>
+        <p style="margin-top:1rem;">&copy; 2026 WAKYO Travel. All rights reserved. | 用心发现日本之美</p>
+    </footer>
+
+    <!-- Scroll Nav Effect -->
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+        });
+
+        // Scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.dest-card, .season-card, .culture-grid, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+            el.style.transition = 'all 0.8s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
